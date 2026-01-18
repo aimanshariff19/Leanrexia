@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enrollment | Learnexia</title>
+    
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    body {
+        background: #f1f5f9;
+        color: #1f2933;
+        text-align: center;
+    }
+
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .enroll-box {
+        background: white;
+        padding: 30px;
+        width: 400px;
+        border-radius: 14px;
+        box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+    }
+
+    .enroll-box h2 {
+        margin-bottom: 20px;
+    }
+
+    .btn {
+        background-color: #1e40af;
+        display: inline-block;
+        padding: 10px 22px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    .primary {
+        background-color: #2563eb; /* Blue */
+    }
+
+    .outline {
+        background-color: transparent; /* Transparent */
+        border-style:solid; /* Solid border */
+        border-width :2px; /* Border width */
+        border-color :#2563eb; /* Border color */
+        color :#2563eb; /* Text color */
+        margin-left :15px; /* Left margin */
+        margin-right :15px; /* Right margin */
+        margin-top :15px; /* Top margin */
+        margin-bottom :15px; /* Bottom margin */
+        padding-left :22px; /* Left padding */
+        padding-right :22px; /* Right padding */
+        padding-top :10px; /* Top padding */
+        padding-bottom :10px; /* Bottom padding */
+        border-radius :8px; /* Border radius */
+        font-size :15px; /* Font size */   
+        font-weight :600; /* Font weight */
+    }
+
+</style>
+
+</head>
+
+<body class="center">
+
+<div class="enroll-box">
+    <h2>Program Enrollment</h2>
+
+    <p>
+        <strong>Selected Program:</strong><br>
+        <span id="programName">Loading...</span>
+    </p>
+
+    <button class="btn primary" onclick="confirmEnroll()">
+        Confirm Enrollment
+    </button>
+
+    <button class="btn outline" onclick="window.location.href='dashboard.html'">
+        ← Back to Dashboard
+    </button>
+</div>
+
+<script src="script.js?v=2"></script>
+</body>
+</html>

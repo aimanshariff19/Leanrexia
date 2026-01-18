@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Feedback</title>
+
+<style>
+body{
+  font-family: Arial;
+  background:#f1f5f9;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.feedback-box{
+  background:white;
+  padding:30px;
+  width:350px;
+  text-align:center;
+  border-radius:10px;
+  box-shadow:8px 8px 15px rgba(0,0,0,0.15);
+}
+span{
+  font-size:30px;
+  cursor:pointer;
+}
+button{
+  margin-top:15px;
+  padding:8px 18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="feedback-box">
+<h2>Rate Our Website</h2>
+
+<div>
+  <span onclick="rate(1)">⭐</span>
+  <span onclick="rate(2)">⭐</span>
+  <span onclick="rate(3)">⭐</span>
+  <span onclick="rate(4)">⭐</span>
+  <span onclick="rate(5)">⭐</span>
+</div>
+
+<p id="ratingText">No rating yet</p>
+<button onclick="submitFeedback()">Submit Feedback</button>
+<p id="msg"></p>
+</div>
+
+<script>
+let rating = 0;
+
+function rate(stars){
+  rating = stars;
+  document.getElementById("ratingText").innerText =
+    "You rated " + stars + " stars ⭐";
+}
+
+function submitFeedback(){
+  if(rating === 0){
+    alert("Please select a rating");
+    return;
+  }
+
+fetch("http://localhost:5000/feedback", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ rating })
+})
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("msg").innerText = data.message;
+  })
+  .catch(err => {
+    console.error(err);
+    document.getElementById("msg").innerText = "Error submitting feedback";
+  });
+}
+</script>
+
+
+</body>
+</html>

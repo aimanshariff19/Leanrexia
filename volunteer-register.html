@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>volunteer Registration | EduBridge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="center">
+
+<div class="card">
+    <h2>Volunteer Registration</h2>
+
+    <input  id="name" type="text" placeholder="Full Name">
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+    <input id="skills" type="text" placeholder="Skills / Interest Area">
+
+    <button type="button" class="btn primary" onclick="register_volunteer()">Register</button>
+<p id="registerMsg" style="color:red; margin-top:10px;"></p>
+
+
+<a href="register.html" class="btn outline">Back</a>
+</div>
+
+<script>
+    function register_volunteer() {
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const skills = document.getElementById("skills").value;
+
+    if (name === "" || email === "" || password === "" || skills === "") {
+        alert("Please fill all fields");
+        return;
+    }
+
+    const data = {
+        name: name,
+        email: email,
+        password: password,
+        role: "Volunteer"   // ✅ FIXED
+    };
+
+    fetch("http://localhost:5000/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.text())
+    .then(result => {
+        alert(result);
+
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("skills").value = ""; // ✅ FIXED
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Registration failed");
+    });
+}
+</script>
+
+</body>
+</html>
+

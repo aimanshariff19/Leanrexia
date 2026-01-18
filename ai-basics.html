@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Basics | EduBridge</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            padding: 30px;
+        }
+
+        .course-box {
+            background: white;
+            max-width: 850px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 8px 8px 15px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e40af;
+        }
+
+        .module {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-left: 5px solid #2563eb;
+            border-radius: 6px;
+        }
+
+        .title {
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .status {
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .completed {
+            color: green;
+            font-weight: bold;
+        }
+
+        .pending {
+            color: #b45309;
+        }
+
+        .watch-btn {
+            background: #2563eb;
+            color: white;
+            padding: 8px 14px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 25px;
+            background: #2563eb;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="course-box">
+    <h2>Basics of Artificial Intelligence</h2>
+    <div id="modules"></div>
+    <a href="dashboard.html" class="back">← Back to Dashboard</a>
+</div>
+
+<script>
+    const modules = [
+        { id: "ai1", title: "What is AI?", link: "https://www.youtube.com/watch?v=2ePf9rue1Ao" },
+        { id: "ai2", title: "Machine Learning Basics", link: "https://www.youtube.com/watch?v=GwIo3gDZCVQ" },
+        { id: "ai3", title: "Deep Learning Overview", link: "https://www.youtube.com/watch?v=aircAruvnKk" }
+    ];
+
+    const container = document.getElementById("modules");
+
+    function isCompleted(id) {
+        return localStorage.getItem("ai_" + id) === "true";
+    }
+
+    function markCompleted(id) {
+        localStorage.setItem("ai_" + id, "true");
+        renderModules();
+    }
+
+    function isUnlocked(index) {
+        return index === 0 || isCompleted(modules[index - 1].id);
+    }
+
+    function renderModules() {
+        container.innerHTML = "";
+        modules.forEach((m, index) => {
+            const completed = isCompleted(m.id);
+            const unlocked = isUnlocked(index);
+
+            const div = document.createElement("div");
+            div.className = "module";
+            div.style.opacity = unlocked ? "1" : "0.5";
+
+            div.innerHTML = `
+                <div class="title">${m.title}</div>
+                <div class="status ${completed ? "completed" : "pending"}">
+                    Status: ${completed ? "Completed ✔" : unlocked ? "Unlocked" : "Locked 🔒"}
+                </div>
+                ${
+                    unlocked
+                        ? `<a class="watch-btn" target="_blank"
+                             href="${m.link}"
+                             onclick="markCompleted('${m.id}')">▶ Watch Video</a>`
+                        : `<span class="watch-btn" style="background:#9ca3af;">🔒 Locked</span>`
+                }
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    renderModules();
+</script>
+
+</body>
+</html>
