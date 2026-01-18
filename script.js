@@ -90,4 +90,95 @@ function login() {
 
     fetch(`${API_URL}/login`, {
         method: "POST",
-        headers: { "Content-Type
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            msgBox.style.color = "green";
+            msgBox.innerText = "Login successful";
+            setTimeout(() => {
+                window.location.href = "dashboard.html";
+            }, 800);
+        } else {
+            msgBox.style.color = "red";
+            msgBox.innerText = data.message || "Invalid email or password";
+        }
+    })
+    .catch(() => {
+        msgBox.style.color = "red";
+        msgBox.innerText = "Server error";
+    });
+}
+
+/* =========================
+   DASHBOARD → ENROLL
+   ========================= */
+
+function goToEnroll(programCode) {
+    window.location.href = "enrollment.html?program=" + programCode;
+}
+
+/* =========================
+   ENROLLMENT PAGE LOAD
+   ========================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+    const programSpan = document.getElementById("programName");
+    if (!programSpan) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const programCode = params.get("program");
+
+    const programNames = {
+        digital: "Digital Learning",
+        ai: "Learn basic about AI",
+        fullstack: "Learn Fullstack Development",
+        datascience: "Data Science",
+        environment: "Environmental Education",
+        health: "Health and Hygiene"
+    };
+
+    if (!programNames[programCode]) {
+        programSpan.innerText = "No program selected";
+        return;
+    }
+
+    localStorage.setItem("enroll_program", programCode);
+    programSpan.innerText = programNames[programCode];
+});
+
+/* =========================
+   CONFIRM ENROLLMENT
+   ========================= */
+
+function confirmEnroll() {
+    const programCode = localStorage.getItem("enroll_program");
+
+    const routes = {
+        digital: "digital-learning.html",
+        ai: "ai-basics.html",
+        fullstack: "fullstack.html",
+        datascience: "datascience.html",
+        environment: "environment.html",
+        health: "health.html"
+    };
+
+    const page = routes[programCode];
+
+    if (!page) {
+        alert("Invalid program selected");
+        return;
+    }
+
+    // Save enrollment (backend)
+    fetch(`${API_URL}/enroll`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ program: programCode })
+    }).catch(() => console.warn("Enrollment API failed"));
+
+    // Redirect regardless
+    window.location.href = page;
+}
