@@ -1,4 +1,11 @@
 /* =========================
+   BACKEND API CONFIG
+   ========================= */
+
+// 👇 CHANGE ONLY THIS IF YOUR URL IS DIFFERENT
+const API_URL = "https://backeend.onrender.com";
+
+/* =========================
    REGISTRATION FUNCTIONS
    ========================= */
 
@@ -13,14 +20,14 @@ function register_student() {
         return;
     }
 
-    fetch("http://localhost:5000/register", {
+    fetch(`${API_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, role: "Student" })
     })
     .then(res => res.text())
     .then(msg => alert(msg))
-    .catch(() => alert("Registration failed"));
+    .catch(() => alert("Server error"));
 }
 
 function register_volunteer() {
@@ -34,14 +41,14 @@ function register_volunteer() {
         return;
     }
 
-    fetch("http://localhost:5000/register", {
+    fetch(`${API_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, role: "volunteer" })
     })
     .then(res => res.text())
     .then(msg => alert(msg))
-    .catch(() => alert("Registration failed"));
+    .catch(() => alert("Server error"));
 }
 
 function register_ngo() {
@@ -55,14 +62,14 @@ function register_ngo() {
         return;
     }
 
-    fetch("http://localhost:5000/register", {
+    fetch(`${API_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, role: "NGO" })
     })
     .then(res => res.text())
     .then(msg => alert(msg))
-    .catch(() => alert("Registration failed"));
+    .catch(() => alert("Server error"));
 }
 
 /* =========================
@@ -82,7 +89,7 @@ function login() {
         return;
     }
 
-    fetch("http://localhost:5000/login", {
+    fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -92,7 +99,9 @@ function login() {
         if (data.success) {
             msgBox.style.color = "green";
             msgBox.innerText = "Login successful";
-            setTimeout(() => window.location.href = "dashboard.html", 800);
+            setTimeout(() => {
+                window.location.href = "dashboard.html";
+            }, 800);
         } else {
             msgBox.style.color = "red";
             msgBox.innerText = data.message || "Invalid credentials";
@@ -142,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /* =========================
-   CONFIRM ENROLLMENT (FIXED)
+   CONFIRM ENROLLMENT
    ========================= */
 
 function confirmEnroll() {
@@ -164,29 +173,13 @@ function confirmEnroll() {
         return;
     }
 
-    // 🔹 Backend call (optional – does NOT block redirect)
-    fetch("http://localhost:5000/enroll", {
+    // Save enrollment in backend
+    fetch(`${API_URL}/enroll`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ program: programCode })
-    }).catch(() => {
-        console.warn("Backend enrollment failed, continuing...");
-    });
+    }).catch(() => console.warn("Enrollment API failed"));
 
-    // ✅ ALWAYS REDIRECT
+    // Redirect always
     window.location.href = page;
-}
-
-/* =========================
-   PROGRESS BAR (OPTIONAL)
-   ========================= */
-
-let progress = 40;
-
-function increaseProgress() {
-    if (progress < 100) {
-        progress += 10;
-        const bar = document.getElementById("progress");
-        if (bar) bar.style.width = progress + "%";
-    }
 }
