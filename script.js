@@ -76,11 +76,19 @@ function register_ngo() {
    ========================= */
 
 function login() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    alert("Login function called"); // DEBUG 1
+
+    const emailEl = document.getElementById("email");
+    const passEl = document.getElementById("password");
     const msgBox = document.getElementById("loginMsg");
 
-    msgBox.innerText = "";
+    if (!emailEl || !passEl || !msgBox) {
+        alert("HTML ID mismatch (email/password/loginMsg)");
+        return;
+    }
+
+    const email = emailEl.value;
+    const password = passEl.value;
 
     if (!email || !password) {
         msgBox.innerText = "Please fill all fields";
@@ -88,13 +96,20 @@ function login() {
         return;
     }
 
+    alert("Sending request to backend"); // DEBUG 2
+
     fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
     })
-    .then(res => res.json())
+    .then(res => {
+        alert("Backend responded"); // DEBUG 3
+        return res.json();
+    })
     .then(data => {
+        console.log("Backend data:", data); // DEBUG 4
+
         if (data.success) {
             msgBox.style.color = "green";
             msgBox.innerText = "Login successful";
@@ -103,14 +118,15 @@ function login() {
             }, 800);
         } else {
             msgBox.style.color = "red";
-            msgBox.innerText = data.message || "Invalid email or password";
+            msgBox.innerText = data.message || "Login failed";
         }
     })
-    .catch(() => {
-        msgBox.style.color = "red";
-        msgBox.innerText = "Server error";
+    .catch(err => {
+        console.error("Login error:", err);
+        alert("Login failed – check console");
     });
 }
+
 
 /* =========================
    DASHBOARD → ENROLL
@@ -182,3 +198,4 @@ function confirmEnroll() {
     // Redirect regardless
     window.location.href = page;
 }
+
